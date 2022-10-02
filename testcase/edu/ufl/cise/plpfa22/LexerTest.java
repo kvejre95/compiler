@@ -151,7 +151,7 @@ class LexerTest {
 				  d>=ef/
 				  //// this @ # Blah is a comment
 				     ghi
-			
+				0"String"23;
 				""";
 		show(input);
 		ILexer lexer = getLexer(input);
@@ -164,6 +164,11 @@ class LexerTest {
 		checkIdent(lexer.next(), "ef", 3,6);
 		checkToken(lexer.next(), Kind.DIV, 3,8);
 		checkIdent(lexer.next(), "ghi", 5,6);
+		checkInt(lexer.next(), 0, 6,1);
+		checkToken(lexer.next(), Kind.STRING_LIT, 6,2);
+		checkInt(lexer.next(), 23, 6,10);
+		checkToken(lexer.next(), Kind.SEMI, 6,12);
+
 		checkEOF(lexer.next());
 	}
 	
@@ -172,12 +177,20 @@ class LexerTest {
 	public void testIdenInt() throws LexicalException {
 		String input = """
 				a123 456b
+				WHILE j < 24 DO CALL z
 				""";
 		show(input);
 		ILexer lexer = getLexer(input);
 		checkIdent(lexer.next(), "a123", 1,1);
 		checkInt(lexer.next(), 456, 1,6);
 		checkIdent(lexer.next(), "b",1,9);
+		checkToken(lexer.next(), Kind.KW_WHILE, 2,1);
+		checkIdent(lexer.next(), "j",2,7);
+		checkToken(lexer.next(), Kind.LT, 2,9);
+		checkInt(lexer.next(), 24, 2,11);
+		checkToken(lexer.next(), Kind.KW_DO, 2,14);
+		checkToken(lexer.next(), Kind.KW_CALL, 2,17);
+		checkIdent(lexer.next(), "z",2,22);
 		checkEOF(lexer.next());
 		}
 	

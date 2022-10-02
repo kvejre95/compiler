@@ -1,6 +1,9 @@
 package edu.ufl.cise.plpfa22;
 
-import edu.ufl.cise.plpfa22.ast.ASTNode;
+import edu.ufl.cise.plpfa22.ast.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimpleParser implements IParser {
     ILexer scanner;
@@ -17,7 +20,7 @@ public class SimpleParser implements IParser {
 
     @Override
     public ASTNode parse() throws PLPException {
-        return null;
+        return program();
     }
 
     private boolean isKind(IToken t, IToken.Kind kind) {
@@ -37,86 +40,148 @@ public class SimpleParser implements IParser {
         }
     }
 
-    private void program() throws LexicalException, SyntaxException {
-        block();
+    private ASTNode program() throws LexicalException, SyntaxException {
+        IToken firstToken = t;
+        ASTNode an;
+        an = new Program(firstToken, (Block) block());
         match(IToken.Kind.DOT);
-        //return null;
+        if (t.getKind() == IToken.Kind.EOF) {
+            return an;
+        } else {
+            throw new SyntaxException("Program should terminate after .");
+        }
     }
 
-    private void block() throws LexicalException, SyntaxException {
+    private ASTNode block() throws LexicalException, SyntaxException {
+        IToken firstToken = t;
+        ASTNode an;
+        List<ConstDec> constDecs = new ArrayList<ConstDec>();
+        List<ProcDec> procDecs = new ArrayList<ProcDec>();
+        List<VarDec> varDecs = new ArrayList<VarDec>();
+
         while (isKind(t, IToken.Kind.KW_CONST)) {
             match(IToken.Kind.KW_CONST);
+            IToken tempToken  = t;
             match(IToken.Kind.IDENT);
             match(IToken.Kind.EQ);
-            const_val();
+            Expression e = (Expression) const_val();
+            IToken temp = e.firstToken;
+            ConstDec constDec = null;
+            if(temp.getKind()==IToken.Kind.NUM_LIT){
+                 constDec = new ConstDec(firstToken,tempToken,temp.getIntValue());
+            } else if(temp.getKind()==IToken.Kind.STRING_LIT){
+                 constDec = new ConstDec(firstToken,tempToken,temp.getStringValue());
+            } else if (temp.getKind() == IToken.Kind.BOOLEAN_LIT) {
+                constDec = new ConstDec(firstToken,tempToken,temp.getBooleanValue());
+            }
+            constDecs.add(constDec);
             while (isKind(t, IToken.Kind.COMMA)) {
                 match(IToken.Kind.COMMA);
+                tempToken= t;
                 match(IToken.Kind.IDENT);
                 match(IToken.Kind.EQ);
+                e = (Expression) const_val();
+                temp = e.firstToken;
+                constDec = null;
+                if(temp.getKind()==IToken.Kind.NUM_LIT){
+                    constDec = new ConstDec(firstToken,tempToken,temp.getIntValue());
+                } else if(temp.getKind()==IToken.Kind.STRING_LIT){
+                    constDec = new ConstDec(firstToken,tempToken,temp.getStringValue());
+                } else if (temp.getKind() == IToken.Kind.BOOLEAN_LIT) {
+                    constDec = new ConstDec(firstToken,tempToken,temp.getBooleanValue());
+                }
+                constDecs.add(constDec);
             }
             match(IToken.Kind.SEMI);
         }
 
         while (isKind(t, IToken.Kind.KW_VAR)) {
             match(IToken.Kind.KW_VAR);
+            IToken tempToken = t;
             match(IToken.Kind.IDENT);
+            VarDec varDec = new VarDec(firstToken, tempToken);
+            varDecs.add(varDec);
             while (isKind(t, IToken.Kind.COMMA)) {
                 match(IToken.Kind.COMMA);
+                tempToken = t;
                 match(IToken.Kind.IDENT);
+                varDec = new VarDec(firstToken, tempToken);
+                varDecs.add(varDec);
             }
             match(IToken.Kind.SEMI);
         }
 
         while (isKind(t, IToken.Kind.KW_PROCEDURE)) {
             match(IToken.Kind.KW_PROCEDURE);
+            IToken tempToken  = t;
             match(IToken.Kind.IDENT);
             match(IToken.Kind.SEMI);
-            block();
+            ProcDec procDec = new ProcDec(firstToken, tempToken, (Block) block());
+            procDecs.add(procDec);
             match(IToken.Kind.SEMI);
         }
-        statement();
+        Statement s = (Statement) statement();
+        an = new Block(firstToken, constDecs, varDecs, procDecs, s);
+        return an;
     }
 
-    private void statement() throws LexicalException, SyntaxException {
+    private ASTNode statement() throws LexicalException, SyntaxException {
+        IToken firstToken = t;
+        ASTNode an;
         if (isKind(t, IToken.Kind.IDENT)) {
+            Ident ident = new Ident(t);
             match(IToken.Kind.IDENT);
             match(IToken.Kind.ASSIGN);
-            expression();
+            Expression e = (Expression) expression();
+            an = new StatementAssign(firstToken, ident, e);
         } else if (isKind(t, IToken.Kind.KW_CALL)) {
             match(IToken.Kind.KW_CALL);
+            Ident ident = new Ident(t);
             match(IToken.Kind.IDENT);
+            an = new StatementCall(firstToken, ident);
         } else if (isKind(t, IToken.Kind.QUESTION)) {
             match(IToken.Kind.QUESTION);
+            Ident ident = new Ident(t);
             match(IToken.Kind.IDENT);
+            an = new StatementInput(firstToken, ident);
         } else if (isKind(t, IToken.Kind.BANG)) {
             match(IToken.Kind.BANG);
-            expression();
+            Expression e = (Expression) expression();
+            an = new StatementOutput(firstToken, e);
         } else if (isKind(t, IToken.Kind.KW_BEGIN)) {
             match(IToken.Kind.KW_BEGIN);
-            statement();
+            List<Statement> s = new ArrayList<>();
+            s.add((Statement) statement());
             while (isKind(t, IToken.Kind.SEMI)) {
                 match(IToken.Kind.SEMI);
-                statement();
+                s.add((Statement) statement());
             }
             match(IToken.Kind.KW_END);
+            an = new StatementBlock(firstToken, s);
         } else if (isKind(t, IToken.Kind.KW_IF)) {
             match(IToken.Kind.KW_IF);
-            expression();
+            Expression e = (Expression) expression();
             match(IToken.Kind.KW_THEN);
-            statement();
+            Statement s = (Statement) statement();
+            an = new StatementIf(firstToken, e, s);
         } else if (isKind(t, IToken.Kind.KW_WHILE)) {
             match(IToken.Kind.KW_WHILE);
-            expression();
+            Expression e = (Expression) expression();
             match(IToken.Kind.KW_DO);
-            statement();
+            Statement s = (Statement) statement();
+            an = new StatementWhile(firstToken, e, s);
         } else {
-            return;
+            an = new StatementEmpty(firstToken);
         }
+        return an;
     }
 
-    private void expression() throws LexicalException, SyntaxException {
-        additive_expression();
+    private ASTNode expression() throws LexicalException, SyntaxException {
+        IToken firstToken = t;
+        ASTNode an_left, an_right;
+        an_left = additive_expression();
         while (isKind(t, IToken.Kind.LT) || isKind(t, IToken.Kind.GT) || isKind(t, IToken.Kind.EQ) || isKind(t, IToken.Kind.NEQ) || isKind(t, IToken.Kind.LE) || isKind(t, IToken.Kind.GE)) {
+            IToken op = t;
             if (isKind(t, IToken.Kind.LT)) {
                 match(IToken.Kind.LT);
             } else if (isKind(t, IToken.Kind.GT)) {
@@ -130,25 +195,35 @@ public class SimpleParser implements IParser {
             } else if (isKind(t, IToken.Kind.GE)) {
                 match(IToken.Kind.GE);
             }
-            additive_expression();
+            an_right = additive_expression();
+            an_left = new ExpressionBinary(firstToken, (Expression) an_left, op, (Expression) an_right);
         }
+        return an_left;
     }
 
-    private void additive_expression() throws LexicalException, SyntaxException {
-        multiplicative_expression();
+    private ASTNode additive_expression() throws LexicalException, SyntaxException {
+        IToken firstToken = t;
+        ASTNode an_left, an_right;
+        an_left = multiplicative_expression();
         while (isKind(t, IToken.Kind.PLUS) || isKind(t, IToken.Kind.MINUS)) {
+            IToken op = t;
             if (isKind(t, IToken.Kind.PLUS)) {
                 match(IToken.Kind.PLUS);
             } else if (isKind(t, IToken.Kind.MINUS)) {
                 match(IToken.Kind.MINUS);
             }
-            multiplicative_expression();
+            an_right = multiplicative_expression();
+            an_left = new ExpressionBinary(firstToken, (Expression) an_left, op, (Expression) an_right);
         }
+        return an_left;
     }
 
-    private void multiplicative_expression() throws LexicalException, SyntaxException {
-        primary_expression();
+    private ASTNode multiplicative_expression() throws LexicalException, SyntaxException {
+        IToken firstToken = t;
+        ASTNode an_left, an_right;
+        an_left = primary_expression();
         while (isKind(t, IToken.Kind.TIMES) || isKind(t, IToken.Kind.DIV) || isKind(t, IToken.Kind.MOD)) {
+            IToken op = t;
             if (isKind(t, IToken.Kind.TIMES)) {
                 match(IToken.Kind.TIMES);
             } else if (isKind(t, IToken.Kind.DIV)) {
@@ -156,37 +231,45 @@ public class SimpleParser implements IParser {
             } else if (isKind(t, IToken.Kind.MOD)) {
                 match(IToken.Kind.MOD);
             }
-            primary_expression();
+            an_right = primary_expression();
+            an_left = new ExpressionBinary(firstToken, (Expression) an_left, op, (Expression) an_right);
         }
+        return an_left;
     }
 
-    private void primary_expression() throws LexicalException, SyntaxException {
+    private ASTNode primary_expression() throws LexicalException, SyntaxException {
+        IToken firstToken = t;
+        ASTNode an;
         if (isKind(t, IToken.Kind.IDENT)) {
+            an = new ExpressionIdent(firstToken);
             match(IToken.Kind.IDENT);
         } else if (isKind(t, IToken.Kind.NUM_LIT) || isKind(t, IToken.Kind.STRING_LIT) || isKind(t, IToken.Kind.BOOLEAN_LIT)) {
-            const_val();
+            an = const_val();
         } else if (isKind(t, IToken.Kind.LPAREN)) {
             match(IToken.Kind.LPAREN);
-            expression();
+            an = expression();
             match(IToken.Kind.RPAREN);
         } else {
             throw new SyntaxException("Error Found");
         }
+        return an;
     }
 
-    private void const_val() throws LexicalException, SyntaxException {
+    private ASTNode const_val() throws LexicalException, SyntaxException {
         IToken firstToken = t;
-        ASTNode an = null;
+        ASTNode an;
         if (isKind(t, IToken.Kind.NUM_LIT)) {
+            an = new ExpressionNumLit(firstToken);
             match(IToken.Kind.NUM_LIT);
-        } else if (isKind(t, IToken.Kind.STRING_LIT)){
+        } else if (isKind(t, IToken.Kind.STRING_LIT)) {
+            an = new ExpressionStringLit(firstToken);
             match(IToken.Kind.STRING_LIT);
-        } else if (isKind(t, IToken.Kind.BOOLEAN_LIT)){
+        } else if (isKind(t, IToken.Kind.BOOLEAN_LIT)) {
+            an = new ExpressionBooleanLit(firstToken);
             match(IToken.Kind.BOOLEAN_LIT);
-        }  else {
+        } else {
             throw new SyntaxException("Error Found");
         }
+        return an;
     }
-
-
 }

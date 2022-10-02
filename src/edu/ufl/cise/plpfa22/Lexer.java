@@ -34,6 +34,7 @@ public class Lexer implements ILexer {
         is_colon = false;
         isString = false;
         backslash = false;
+        have_zero = false;
         Token t = new Token();
         //EOF
         if (position >= input.length()) {
@@ -53,7 +54,7 @@ public class Lexer implements ILexer {
                             t.ActualText.add(c);
                             is_start = false;
                             have_zero = true;
-                        } else if (t.kind == IToken.Kind.NUM_LIT || t.kind == IToken.Kind.IDENT || isString) {
+                        } else if ((t.kind == IToken.Kind.NUM_LIT && !have_zero) || t.kind == IToken.Kind.IDENT || isString) {
                             StringBuilder sb = new StringBuilder();
                             t.value = sb.append(t.value).append(c).toString();
                             t.ActualText.add(c);
@@ -389,6 +390,11 @@ public class Lexer implements ILexer {
                             t.value = sb.append(t.value).append(c).toString();
                             t.ActualText.add(c);
                             backslash = false;
+                        }else {
+                            position = i;
+                            column_number = column_number + counter - 1;
+                            counter = 0;
+                            break;
                         }
                     }
                 } else if (c == '\\') {
