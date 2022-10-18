@@ -9,13 +9,9 @@ public class SimpleParser implements IParser {
     ILexer scanner;
     IToken t;
 
-    public SimpleParser(ILexer scanner) {
+    public SimpleParser(ILexer scanner) throws LexicalException {
         this.scanner = scanner;
-        try {
-            t = scanner.next();
-        } catch (LexicalException e) {
-            throw new RuntimeException(e);
-        }
+        t = scanner.next();
     }
 
     @Override

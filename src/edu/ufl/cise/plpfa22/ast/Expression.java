@@ -7,7 +7,7 @@ package edu.ufl.cise.plpfa22.ast;
 import edu.ufl.cise.plpfa22.IToken;
 import edu.ufl.cise.plpfa22.ast.Types.Type;
 
-public abstract class Expression extends ASTNode {
+public abstract class  Expression extends ASTNode {
 	
 	Type type;
 	

@@ -1189,6 +1189,16 @@ class ParserTest {
 	}
 
 	@Test
+	void test41() throws PLPException {
+		String input = """
+        @ abc:=4.
+        """;
+		assertThrows(LexicalException.class, () -> {
+			ASTNode ast = getAST(input);
+		});
+	}
+
+	@Test
 	void invalidConstDec() throws PLPException {
 		String input = """
         CONST alpha = /;

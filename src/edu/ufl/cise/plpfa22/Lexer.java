@@ -34,6 +34,7 @@ public class Lexer implements ILexer {
         is_colon = false;
         isString = false;
         backslash = false;
+
         have_zero = false;
         Token t = new Token();
         //EOF
