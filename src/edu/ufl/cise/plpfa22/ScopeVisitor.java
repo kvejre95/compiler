@@ -43,8 +43,9 @@ public class ScopeVisitor implements ASTVisitor {
 
     @Override
     public Object visitStatementAssign(StatementAssign statementAssign, Object arg) throws PLPException {
-        statementAssign.ident.visit(this, arg);
         statementAssign.expression.visit(this, arg);
+        statementAssign.ident.visit(this, arg);
+
         return null;
     }
 

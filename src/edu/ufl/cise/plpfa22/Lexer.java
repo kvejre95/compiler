@@ -313,6 +313,8 @@ public class Lexer implements ILexer {
                             t.ActualText.add(c);
                             position = i + 1;
                             column_number = column_number + 1;
+                            counter = 0;
+                            break;
 
                         } else if (t.getKind() == IToken.Kind.GT) {
                             t.setKind(IToken.Kind.GE);
@@ -321,6 +323,8 @@ public class Lexer implements ILexer {
                             t.ActualText.add(c);
                             position = i + 1;
                             column_number = column_number + 2;
+                            counter = 0;
+                            break;
 
                         } else if (t.getKind() == IToken.Kind.LT) {
                             t.setKind(IToken.Kind.LE);
@@ -329,6 +333,8 @@ public class Lexer implements ILexer {
                             t.ActualText.add(c);
                             position = i + 1;
                             column_number = column_number + 2;
+                            counter = 0;
+                            break;
 
                         } else if (is_colon) {
                             t.setKind(IToken.Kind.ASSIGN);
@@ -338,6 +344,8 @@ public class Lexer implements ILexer {
                             is_colon = false;
                             position = i + 1;
                             column_number = column_number + 2;
+                            counter = 0;
+                            break;
                         } else if (isString) {
                             StringBuilder sb = new StringBuilder();
                             t.value = sb.append(t.value).append(c).toString();
@@ -345,10 +353,11 @@ public class Lexer implements ILexer {
                         } else {
                             position = i;
                             column_number = column_number + counter - 1;
-
+                            counter = 0;
+                            break;
                         }
-                        counter = 0;
-                        break;
+                        /*counter = 0;
+                        break;*/
                     }
                 } else if (c == ' ' || c == '\t' || c == '\r') {
                     if (!is_comment) {

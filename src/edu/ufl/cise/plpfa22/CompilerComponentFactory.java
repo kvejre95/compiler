@@ -18,4 +18,11 @@ public class CompilerComponentFactory {
 	public static ASTVisitor getScopeVisitor(){
 		return new ScopeVisitor();
 	}
+	public static ASTVisitor getTypeInferenceVisitor(){
+		return new TypeInferenceVisitor();
+	}
+
+	public static ASTVisitor getCodeGenVisitor(String packageName, String className, String sourceFileName){
+		return  new CodeGenVisitor(packageName,className,sourceFileName);
+	}
 }

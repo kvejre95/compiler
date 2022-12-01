@@ -171,6 +171,48 @@ class LexerTest {
 
 		checkEOF(lexer.next());
 	}
+	@Test
+	public void test10Scope() throws LexicalException {
+		String input = """
+				VAR a,b;
+				            PROCEDURE p;
+				              CONST a = 2, b=3;
+				              PROCEDURE q;//16
+				                 CONST b=5;
+				                 VAR a;
+				            
+				                 PROCEDURE r;
+				                    VAR b;
+				                    BEGIN
+				                    b := 3;
+				                    a := 2;
+				                    ! "a=";
+				                    ! a;
+				                    ! "b=";
+				                    ! b;
+				                    END;
+				                CALL r;
+				              CALL q;
+				            BEGIN
+				               CALL p;
+				               a := 0;
+				               b := TRUE
+				               END
+				               .
+				            
+				""";
+		show(input);
+		ILexer lexer = getLexer(input);
+		checkToken(lexer.next(), Kind.KW_VAR, 1,1);
+		checkIdent(lexer.next(), "a", 1,5);
+		checkToken(lexer.next(), Kind.COMMA, 1,6);
+		checkIdent(lexer.next(), "b", 1,7);
+		for (int i=0;i<40;i++) {
+			lexer.next();
+		}
+		checkToken(lexer.next(), Kind.STRING_LIT, 13,11);
+		checkEOF(lexer.next());
+	}
 	
 	
 	@Test

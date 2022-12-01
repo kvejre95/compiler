@@ -56,6 +56,7 @@ public class SimpleParser implements IParser {
         List<VarDec> varDecs = new ArrayList<VarDec>();
 
         while (isKind(t, IToken.Kind.KW_CONST)) {
+            firstToken = t;
             match(IToken.Kind.KW_CONST);
             IToken tempToken  = t;
             match(IToken.Kind.IDENT);
@@ -92,6 +93,7 @@ public class SimpleParser implements IParser {
         }
 
         while (isKind(t, IToken.Kind.KW_VAR)) {
+            firstToken = t;
             match(IToken.Kind.KW_VAR);
             IToken tempToken = t;
             match(IToken.Kind.IDENT);
@@ -108,6 +110,7 @@ public class SimpleParser implements IParser {
         }
 
         while (isKind(t, IToken.Kind.KW_PROCEDURE)) {
+            firstToken = t;
             match(IToken.Kind.KW_PROCEDURE);
             IToken tempToken  = t;
             match(IToken.Kind.IDENT);
