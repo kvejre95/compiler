@@ -25,8 +25,8 @@ public class CodeGenTests2 {
 
 	/**
 	 * Generates  classfiles for the given source program.  The classfile containing the main method has the given name and package.
-	 * Other classfiles are synthetic inner classes that correspond to procedures. 
-	 * 
+	 * Other classfiles are synthetic inner classes that correspond to procedures.
+	 *
 	 * @param input
 	 * @param className
 	 * @param packageName
@@ -48,11 +48,11 @@ public class CodeGenTests2 {
 	}
 
 
-	
+
 	Object loadClassesAndRunMain(List<GenClass> classes, String className) throws Exception{
 		DynamicClassLoader loader = new DynamicClassLoader();
 		Class<?> mainClass = loader.define(classes);
-		Object[] args = new Object[1];  
+		Object[] args = new Object[1];
 		return runMethod(mainClass, "main", args);
 	}
 
@@ -82,22 +82,22 @@ public class CodeGenTests2 {
 		show(CodeGenUtils.bytecodeToString(bytecode));
 	}
 
-	void show(GenClass genClass) {		
+	void show(GenClass genClass) {
 			show(genClass.className());
-			show(genClass.byteCode());		
+			show(genClass.byteCode());
 	}
-	
+
 	void show(List<GenClass> classes) {
 		for(GenClass aClass: classes) show(aClass);
 	}
-	
+
 	void show(ASTNode ast) throws PLPException {
 		if(VERBOSE) {if (ast != null) {System.out.println(PrettyPrintVisitor.AST2String(ast));}
 		else {System.out.println("ast = null");}
 		}
 	}
 
-	
+
 	@DisplayName("numOut")
 	@Test
 	public void numout(TestInfo testInfo)throws Exception {
@@ -107,11 +107,11 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
 		loadClassesAndRunMain(classes, className);
-	
+
 	}
 
 	@DisplayName("stringOut")
@@ -123,12 +123,12 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
 		loadClassesAndRunMain(classes, className);
 	}
-	
+
 	@DisplayName("booleanOut")
 	@Test
 	public void booleanOut(TestInfo testInfo)throws Exception {
@@ -138,12 +138,12 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
 		loadClassesAndRunMain(classes, className);
-	}	
-	
+	}
+
 	@DisplayName("statementBlock")
 	@Test
 	public void statementBlock(TestInfo testInfo)throws Exception{
@@ -157,12 +157,12 @@ public class CodeGenTests2 {
 			""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
 		loadClassesAndRunMain(classes, className);
-	}	
-	
+	}
+
 	@DisplayName("intOps")
 	@Test
 	public void intOps(TestInfo testInfo)throws Exception{
@@ -178,12 +178,12 @@ public class CodeGenTests2 {
 			""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
 		loadClassesAndRunMain(classes, className);
-	}		
-	
+	}
+
 	@DisplayName("intEqOps")
 	@Test
 	public void intEqOps(TestInfo testInfo) throws Exception {
@@ -196,14 +196,14 @@ public class CodeGenTests2 {
 				END
 				.
 				""";
-		
+
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
 		loadClassesAndRunMain(classes, className);
-		
+
 	}
 
 	@DisplayName("boolEqOps")
@@ -222,18 +222,18 @@ public class CodeGenTests2 {
 				END
 				.
 				""";
-		
+
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
 		loadClassesAndRunMain(classes, className);
-		
+
 	}
-	
-	
-	
+
+
+
 	@DisplayName("intRelOps")
 	@Test
 	public void intRelOps(TestInfo testInfo) throws Exception {
@@ -254,15 +254,15 @@ public class CodeGenTests2 {
 				END
 				.
 				""";
-		
+
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
+		loadClassesAndRunMain(classes, className);
 	}
-	
+
 	@DisplayName("boolRelOps")
 	@Test
 	public void boolRelOps(TestInfo testInfo) throws Exception {
@@ -287,16 +287,16 @@ public class CodeGenTests2 {
 				END
 				.
 				""";
-		
+
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);	
+		loadClassesAndRunMain(classes, className);
 	}
-	
-	
+
+
 	@DisplayName("stringEqOps")
 	@Test
 	public void stringEqOps(TestInfo testInfo) throws Exception {
@@ -309,17 +309,17 @@ public class CodeGenTests2 {
 				END
 				.
 				""";
-		
+
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
 		loadClassesAndRunMain(classes, className);
-		
+
 	}
-	
-	
+
+
 	@DisplayName("stringRelOps")
 	@Test
 	public void stringRelOps(TestInfo testInfo) throws Exception {
@@ -344,16 +344,16 @@ public class CodeGenTests2 {
 				END
 				.
 				""";
-		
+
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);	
+		loadClassesAndRunMain(classes, className);
 	}
-	
-	
+
+
 	@DisplayName("constants")
 	@Test
 	public void constants(TestInfo testInfo) throws Exception{
@@ -367,12 +367,12 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);				
+		loadClassesAndRunMain(classes, className);
 	}
-	
+
 	@DisplayName("template")
 	@Test
 	public void template(TestInfo testInfo) throws Exception{
@@ -381,12 +381,12 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
+		loadClassesAndRunMain(classes, className);
 	}
-	
+
 	@DisplayName("const1")
 	@Test
 	public void const1(TestInfo testInfo) throws Exception{
@@ -401,13 +401,13 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
+		loadClassesAndRunMain(classes, className);
 	}
-	
-	
+
+
 	@DisplayName("proc1")
 	@Test
 	public void proc1(TestInfo testInfo) throws Exception{
@@ -424,13 +424,13 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
+		loadClassesAndRunMain(classes, className);
 	}
-	
-	
+
+
 	@DisplayName("var1")
 	@Test
 	public void var1(TestInfo testInfo) throws Exception{
@@ -448,12 +448,12 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
+		loadClassesAndRunMain(classes, className);
 	}
-	
+
 	@DisplayName("var2")
 	@Test
 	public void var2(TestInfo testInfo) throws Exception{
@@ -473,12 +473,12 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
+		loadClassesAndRunMain(classes, className);
 	}
-	
+
 	@DisplayName("var3")
 	@Test
 	public void var3(TestInfo testInfo) throws Exception{
@@ -500,13 +500,13 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
-	}	
-	
-	
+		loadClassesAndRunMain(classes, className);
+	}
+
+
 	@DisplayName("proc2")
 	@Test
 	public void proc2(TestInfo testInfo) throws Exception{
@@ -548,13 +548,13 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
-	}	
-	
-	
+		loadClassesAndRunMain(classes, className);
+	}
+
+
 	@DisplayName("rec2")
 	@Test
 	public void rec2(TestInfo testInfo) throws Exception{
@@ -583,12 +583,12 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
-	}	
-	
+		loadClassesAndRunMain(classes, className);
+	}
+
 	@DisplayName("rec1")
 	@Test
 	public void rec1(TestInfo testInfo) throws Exception{
@@ -610,12 +610,12 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
-	}	
-	
+		loadClassesAndRunMain(classes, className);
+	}
+
 	@DisplayName("while0")
 	@Test
 	public void while0(TestInfo testInfo) throws Exception{
@@ -631,12 +631,269 @@ public class CodeGenTests2 {
 				""";
 		String shortClassName = "prog";
 		String JVMpackageName = "edu/ufl/cise/plpfa22";
-		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);		
-		Object[] args = new Object[1];  
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
 		String className = "edu.ufl.cise.plpfa22.prog";
-		loadClassesAndRunMain(classes, className);		
-	}	
-	
+		loadClassesAndRunMain(classes, className);
+	}
+	@DisplayName("test15")
+	@Test
+	public void test15(TestInfo testInfo) throws Exception{
+		String input = """
+			BEGIN
+			//COMMENT throws Error SYNTAX
+			//
+				IF (TRUE * TRUE) + (FALSE *FALSE)
+				THEN 
+					BEGIN
+					//Throw Error --> \\n --> \\n
+						! "Error Here"
+						! "Nope, error here"
+					END
+			END
+			.
+			""";
+
+
+		String shortClassName = "prog";
+		String JVMpackageName = "edu/ufl/cise/plpfa22";
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
+		String className = "edu.ufl.cise.plpfa22.prog";
+		loadClassesAndRunMain(classes, className);
+	}
+
+
+	@DisplayName("test9")
+	@Test
+	public void test9(TestInfo testInfo) throws Exception{
+		String input = """
+			VAR e, f, g;
+			PROCEDURE proc;
+				BEGIN
+					e:=e*2;
+					!e;
+					IF (2+2-3 <= 7)*(FALSE < TRUE)
+					THEN
+						IF ("2+2-3" = "2+2+3")+(222/2 >= 111)
+						THEN
+							! 222/2 + 111;
+					!"Hello!!";
+				END;
+			CALL proc
+			.
+			""";
+
+		String shortClassName = "prog";
+		String JVMpackageName = "edu/ufl/cise/plpfa22";
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
+		String className = "edu.ufl.cise.plpfa22.prog";
+		loadClassesAndRunMain(classes, className);
+	}
+	@DisplayName("test5")
+	@Test
+	public void test5(TestInfo testInfo) throws Exception {
+
+		String input = """
+				CONST name="@Name", world="World";
+				VAR hello;
+				PROCEDURE p;
+					BEGIN
+						hello:="HELLO+";
+						IF TRUE
+						THEN
+							! hello+" " + "-" + world+ " :"+" " + name
+					END;
+				CALL p
+				.
+				""";
+
+
+		String shortClassName = "prog";
+		String JVMpackageName = "edu/ufl/cise/plpfa22";
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
+		String className = "edu.ufl.cise.plpfa22.prog";
+		loadClassesAndRunMain(classes, className);
+	}
+
+	@DisplayName("test6")
+	@Test
+	public void test6(TestInfo testInfo) throws Exception{
+		String input = """
+			CONST str="Is this", intstr = "12345", intstr2 = "456", str2="equal";
+			VAR a, b, c;
+			BEGIN
+				a:= str+str2;
+				WHILE (a = "Is this equal?")
+				DO
+					BEGIN
+						IF ("STRiNG CoMPaRe" > "strIng cOmpArE")
+						THEN 
+							BEGIN
+								! "THIS is";
+								! TRUE
+							END;
+						!"This is Equal!";
+						a:=a+" not equal";
+						!a			
+					END;
+				b:=intstr+"6";
+				WHILE ((b >= intstr2) * (b > "56") * ("123" < intstr))
+				DO 
+					BEGIN
+						IF ((b >= intstr2) + (intstr2 > "56") * ("123" < intstr))
+						THEN
+							BEGIN 
+								IF (((b >= intstr2) + (intstr2 > "56")) * ("123" < intstr))
+								THEN 
+									! "IF 3 PASSED!";
+								! "IF 2 PASSED!"
+							END;
+						! "IF 1 PASSED!";
+						b:=b+"7"
+					END
+			END
+			.
+			""";
+
+		String shortClassName = "prog";
+		String JVMpackageName = "edu/ufl/cise/plpfa22";
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
+		String className = "edu.ufl.cise.plpfa22.prog";
+		loadClassesAndRunMain(classes, className);
+	}
+	@DisplayName("test8")
+	@Test
+	public void test8(TestInfo testInfo) throws Exception{
+		String input = """
+			CONST space="SPACE";	VAR spaces;
+			PROCEDURE call;
+				BEGIN
+					spaces:=space+"SPACES";
+					! spaces >= "PACES";
+					! spaces > "SPACE";
+					! spaces <= "SPACE";
+					! spaces < "PACE";
+					! "\\n-+*- END -+*-\\n"
+				END;
+			BEGIN
+				CALL call;
+				BEGIN
+					BEGIN
+						IF spaces >= "PACES"
+						THEN
+							! "fALSE" >= "SE";
+						! "1234sTRIGN" # "1234Strign";
+						IF spaces > "SPACE"
+						THEN 
+							! "Checks for spaces" > "spaces";
+						! "doesntcheckforspaces" > "space";
+						! "\\n-+*- END -+*-\\n"
+					END;
+					! (FALSE*TRUE+FALSE*FALSE+TRUE)				
+				END					
+			END
+			.
+			""";
+
+		String shortClassName = "prog";
+		String JVMpackageName = "edu/ufl/cise/plpfa22";
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
+		String className = "edu.ufl.cise.plpfa22.prog";
+		loadClassesAndRunMain(classes, className);
+	}
+	@DisplayName("test7")
+	@Test
+	public void test7(TestInfo testInfo) throws Exception{
+		String input = """
+			CONST int=123;
+			VAR int1;
+			PROCEDURE p;
+				CONST int1=456;
+				BEGIN
+					IF ((int*int1) >= (int1*int)) + ((int+int1) <= int1+int)
+					THEN 
+						BEGIN
+							! "(int*int1)" + "(int1+int) = ";
+							! (int*int1) + (int1+int)
+						END
+				END;
+				
+			PROCEDURE q;
+				BEGIN
+					int1:=456;
+					IF ((int*int1) >= (int1*int)) * ((int+int1) <= int1+int)
+					THEN 
+						BEGIN
+							! "(int*int1)" + "(int1+int) = ";
+							! (int*int1) + (int1+int)
+						END;
+					!"Print here :)"
+				END;
+				
+			BEGIN
+				CALL p;
+				CALL q
+			END
+			.
+			""";
+
+		String shortClassName = "prog";
+		String JVMpackageName = "edu/ufl/cise/plpfa22";
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
+		String className = "edu.ufl.cise.plpfa22.prog";
+		loadClassesAndRunMain(classes, className);
+	}
+
+	@DisplayName("test12")
+	@Test
+	public void test12(TestInfo testInfo) throws Exception {
+
+		String input = """
+			PROCEDURE p;
+				PROCEDURE q;;;
+
+			PROCEDURE q;
+				PROCEDURE p;;;
+
+			PROCEDURE r;
+				PROCEDURE p;
+					PROCEDURE q;
+						VAR r;
+						BEGIN
+							r:=3;
+							IF r=3
+							THEN
+								WHILE r>=0
+								DO
+									BEGIN
+										r:=r+r;
+										!r
+									END
+						END
+					;
+					CALL q
+				;
+				CALL p
+			;
+			CALL r
+			.
+			""";
+
+
+		String shortClassName = "prog";
+		String JVMpackageName = "edu/ufl/cise/plpfa22";
+		List<GenClass> classes = compile(input, shortClassName, JVMpackageName);
+		Object[] args = new Object[1];
+		String className = "edu.ufl.cise.plpfa22.prog";
+		loadClassesAndRunMain(classes, className);
+	}
+
 
 
 }

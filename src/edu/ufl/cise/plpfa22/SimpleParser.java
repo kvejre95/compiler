@@ -28,7 +28,7 @@ public class SimpleParser implements IParser {
         return t;
     }
 
-    public IToken match(IToken.Kind kind) throws LexicalException, SyntaxException {
+    public IToken match(IToken.Kind kind) throws PLPException {
         if (isKind(t, kind)) {
             return consume();
         } else {
@@ -36,7 +36,7 @@ public class SimpleParser implements IParser {
         }
     }
 
-    private ASTNode program() throws LexicalException, SyntaxException {
+    private ASTNode program() throws PLPException {
         IToken firstToken = t;
         ASTNode an;
         an = new Program(firstToken, (Block) block());
@@ -48,7 +48,7 @@ public class SimpleParser implements IParser {
         }
     }
 
-    private ASTNode block() throws LexicalException, SyntaxException {
+    private ASTNode block() throws PLPException {
         IToken firstToken = t;
         ASTNode an;
         List<ConstDec> constDecs = new ArrayList<ConstDec>();
@@ -124,7 +124,7 @@ public class SimpleParser implements IParser {
         return an;
     }
 
-    private ASTNode statement() throws LexicalException, SyntaxException {
+    private ASTNode statement() throws PLPException {
         IToken firstToken = t;
         ASTNode an;
         if (isKind(t, IToken.Kind.IDENT)) {
@@ -175,7 +175,7 @@ public class SimpleParser implements IParser {
         return an;
     }
 
-    private ASTNode expression() throws LexicalException, SyntaxException {
+    private ASTNode expression() throws PLPException {
         IToken firstToken = t;
         ASTNode an_left, an_right;
         an_left = additive_expression();
@@ -200,7 +200,7 @@ public class SimpleParser implements IParser {
         return an_left;
     }
 
-    private ASTNode additive_expression() throws LexicalException, SyntaxException {
+    private ASTNode additive_expression() throws PLPException {
         IToken firstToken = t;
         ASTNode an_left, an_right;
         an_left = multiplicative_expression();
@@ -217,7 +217,7 @@ public class SimpleParser implements IParser {
         return an_left;
     }
 
-    private ASTNode multiplicative_expression() throws LexicalException, SyntaxException {
+    private ASTNode multiplicative_expression() throws PLPException {
         IToken firstToken = t;
         ASTNode an_left, an_right;
         an_left = primary_expression();
@@ -236,7 +236,7 @@ public class SimpleParser implements IParser {
         return an_left;
     }
 
-    private ASTNode primary_expression() throws LexicalException, SyntaxException {
+    private ASTNode primary_expression() throws PLPException {
         IToken firstToken = t;
         ASTNode an;
         if (isKind(t, IToken.Kind.IDENT)) {
@@ -254,7 +254,7 @@ public class SimpleParser implements IParser {
         return an;
     }
 
-    private ASTNode const_val() throws LexicalException, SyntaxException {
+    private ASTNode const_val() throws PLPException {
         IToken firstToken = t;
         ASTNode an;
         if (isKind(t, IToken.Kind.NUM_LIT)) {

@@ -400,7 +400,7 @@ public class Lexer implements ILexer {
                             t.value = sb.append(t.value).append(c).toString();
                             t.ActualText.add(c);
                             backslash = false;
-                        }else {
+                        } else {
                             position = i;
                             column_number = column_number + counter - 1;
                             counter = 0;
@@ -460,7 +460,11 @@ public class Lexer implements ILexer {
                     }
                 } else {
                     if (!is_comment) {
-                        if (is_start) {
+                        if (isString) {
+                            StringBuilder sb = new StringBuilder();
+                            t.value = sb.append(t.value).append(c).toString();
+                            t.ActualText.add(c);
+                        } else if (is_start) {
                             t.setKind(IToken.Kind.ERROR);
                             t.setLocation(column_number, line_number);
                             t.setValue("ERROR");
@@ -473,7 +477,6 @@ public class Lexer implements ILexer {
                         }
                     }
                 }
-
             }
             if (position + counter >= input.length()) {
                 position = position + counter;
